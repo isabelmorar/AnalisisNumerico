@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Menu
+{% endblock %}
+
+{% block content %}
+    <h2 class="text-center">Menú de métodos</h2>
+    <div class="container">
+        <br>
+        <h3 class="text-center">Solución numérica de ecuaciones no lineales</h3>
+        <div class="d-flex flex-wrap justify-content-center">
+            <a href="{% url 'biseccion' %}"><button style="background-color: #FFAB9D;" class="btn btn-lg mx-2 my-2">Bisección</button></a>
+            <a href="{% url 'regla_falsa' %}"><button style="background-color: #FFAB9D;" class="btn btn-lg mx-2 my-2">Regla falsa</button></a>
+            <a href="{% url 'punto_fijo' %}"><button style="background-color: #FFAB9D;" class="btn btn-lg mx-2 my-2">Punto fijo</button></a>
+            <a href="{% url 'newton' %}"><button style="background-color: #FFAB9D;" class="btn btn-lg mx-2 my-2">Newton</button></a>
+            <a href="{% url 'raices_multiples' %}"><button style="background-color: #FFAB9D;" class="btn btn-lg mx-2 my-2">Raices multiples</button></a>
+            <a href="{% url 'secante' %}"><button style="background-color: #FFAB9D;" class="btn btn-lg mx-2 my-2">Secante</button></a>
+        </div>
+        <br>
+        <h3 class="text-center">Solución numérica de ecuaciones</h3>
+        <div class="d-flex flex-wrap justify-content-center">
+            <a href="{% url 'jacobi' %}"><button style="background-color: #FFC9C1" class="btn btn-lg mx-2 my-2">Jacobi</button></a>
+            <a href="{% url 'gauss_seidel' %}"><button style="background-color: #FFC9C1" class="btn btn-lg mx-2 my-2">Gauss Seidel</button></a>
+            <a href="{% url 'SOR' %}"><button style="background-color: #FFC9C1" class="btn btn-lg mx-2 my-2">SOR</button></a>
+        </div>
+        <br>
+        <h3 class="text-center">Solución numérica de ecuaciones</h3>
+        <div class="d-flex flex-wrap justify-content-center">
+            <a href="{% url 'newton_diferencias_divididas' %}"><button style="background-color: #FEE2E0" class="btn btn-lg mx-2 my-2">Newton dif. divididas</button></a>
+            <a href="{% url 'lagrange' %}"><button style="background-color: #FEE2E0" class="btn btn-lg mx-2 my-2">Lagrange</button></a>
+            <a href="{% url 'spline' %}"><button style="background-color: #FEE2E0" class="btn btn-lg mx-2 my-2">Spline</button></a>
+        </div>
+    </div>
+      
+{% endblock %}
