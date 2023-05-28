@@ -53,6 +53,10 @@
       z-index: -1;
     }
   </style>
+  <div class="d-flex">
+    <a class="mr-auto p-2" href="{% url 'punto_fijo' %}"><button style="background-color: #f39c12;" class="text-white btn"> <------ Anterior método: Punto fijo</button></a>
+    <a class="p-2" href="{% url 'raices_multiples' %}"><button style="background-color: #f39c12;" class="text-white btn btn-secondary">Siguiente método: Raices multiples ------></button></a>
+  </div>
   <div class="container mt-5">
         <div class="row">
             <div class="col-lg-5 col-sm-12 mx-auto">
@@ -66,7 +70,7 @@
                       </div>
                       <div class="form-group">
                         <label for="input2">X0:</label>
-                        <input type="number" name="x0" class="form-control" id="input2" placeholder="Ingrese X0" required>
+                        <input type="text" name="x0" class="form-control" id="input2" placeholder="Ingrese X0" required>
                       </div>
                       <div class="form-group">
                         <label>Tipo de tolerancia:</label>

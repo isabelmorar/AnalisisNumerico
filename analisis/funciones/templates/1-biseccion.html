@@ -53,6 +53,11 @@
       z-index: -1;
     }
   </style>
+  <div class="mt-3 ml-2 mr-2  text-center">
+    <div class="d-flex">
+      <a class="ml-auto p-2" href="{% url 'regla_falsa' %}"><button style="background-color: #f39c12;" class="text-white btn btn-secondary">Siguiente método: Regla falsa ------></button></a>
+    </div>
+  </div>
   <div class="container mt-5">
         <div class="row">
             <div class="col-lg-5 col-sm-12 mx-auto">
@@ -99,6 +104,12 @@
                   Tipo de error = {{ tipo_error }} <br>
                   Número de tolerancia = {{ num_tol }} <br>
                   Número de iteraciones = {{ niter }} <br>
+                </div>
+                {% endif %}
+                {% if grafica %}
+                <div class="mt-4">
+                  <h4 class="text-center">Grafica</h4>
+                  <img style="position: relative; right: 90px; width: 600px;" src="{{ grafica }}">
                 </div>
                 {% endif %}
             </div>

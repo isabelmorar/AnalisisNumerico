@@ -53,6 +53,10 @@
       z-index: -1;
     }
   </style>
+  <div class="d-flex">
+    <a class="mr-auto p-2" href="{% url 'biseccion' %}"><button style="background-color: #f39c12;" class="text-white btn"> <------ Anterior método: Bisección</button></a>
+    <a class="p-2" href="{% url 'punto_fijo' %}"><button style="background-color: #f39c12;" class="text-white btn btn-secondary">Siguiente método: Punto fijo ------></button></a>
+  </div>
   <div class="container mt-5">
         <div class="row">
             <div class="col-lg-5 col-sm-12 mx-auto">

@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('',views.home_page, name='home'),
+    path('',views.menu_page, name='menu'),
     path('biseccion/',views.biseccion_page, name='biseccion'),
     path('regla_falsa/',views.regla_falsa_page, name='regla_falsa'),
     path('punto_fijo/',views.punto_fijo_page, name='punto_fijo'),
@@ -19,8 +19,6 @@ urlpatterns = [
     path('newton_diferencias_divididas/',views.newton_diferencias_divididas_page, name='newton_diferencias_divididas'),
     path('lagrange/',views.lagrange_page, name='lagrange'),
     path('spline/',views.spline_page, name='spline'),
-    path('menu/',views.menu_page, name='menu'),
-    path('grafica/',views.grafica_page, name='grafica'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
