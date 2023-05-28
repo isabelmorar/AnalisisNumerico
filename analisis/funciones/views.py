@@ -187,8 +187,11 @@ def regla_falsa_page(request):
             else:
                 s = Xm
                 mensaje = "Fracaso en "+ str(Niter)+ " iteraciones "
+
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
             
-            context={'mensaje':mensaje,'df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
+            context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
             return render(request,template_name='2-regla_falsa.html',context=context)
         
         else:
@@ -261,7 +264,9 @@ def punto_fijo_page(request):
             sol = x_val
             mensaje = "Fracaso en "+ str(Niter)+ " iteraciones "
         
-        context={'mensaje':mensaje,'df':df,'fun':Fun,'x0':iniX0,'gf':gf,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
+        graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+        graph.save('Grafica.png')
+        context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'x0':iniX0,'gf':gf,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
         return render(request,template_name='3-punto_fijo.html',context=context)
 
     if request.method == 'GET':
@@ -294,12 +299,16 @@ def newton_page(request):
         print(domf)
         if not domf.contains(X0):
             mensaje = f"La función no está definida en x = {X0}. El método falla."
-            context = {'mensaje':mensaje,'df':df}
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
             return render(request,template_name='4-newton.html',context=context)
         
         elif not derivative.subs(x, X0).is_finite:
             mensaje = f"La función no es diferenciable en x = {X0}. El método falla."
-            context = {'mensaje':mensaje,'df':df}
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
             return render(request,template_name='4-newton.html',context=context)
         
         else: 
@@ -317,13 +326,17 @@ def newton_page(request):
                 xn = xn - (f/derivada)
                 
                 if not domf.contains(xn):
-                    mensaje = "La función no está definida en x{c} = {xn}. El método falla."
-                    context = {'mensaje':mensaje,'df':df}
+                    mensaje = f"La función no está definida en x{c} = {xn}. El método falla."
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
                     return render(request,template_name='4-newton.html',context=context)
 
                 elif not derivative.subs(x,xn).is_finite:
-                    mensaje = "La función no es diferenciable en x{c} = {xn}. El método falla."
-                    context = {'mensaje':mensaje,'df':df}
+                    mensaje = f"La función no es diferenciable en x{c} = {xn}. El método falla."
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
                     return render(request,template_name='4-newton.html',context=context)
                     
                 f, derivada = func(xn), deriv(xn)
@@ -342,13 +355,17 @@ def newton_page(request):
             if f == 0:
                 s = xn
                 mensaje = str(s)+"es raiz de f(x)"
-                context = {'mensaje':mensaje,'df':df}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
                 return render(request,template_name='4-newton.html',context=context)
             
             if derivada == 0:
                 s = xn
                 mensaje = f"La derivada es 0 en x = {s}. El método falla."
-                context = {'mensaje':mensaje,'df':df}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
                 return render(request,template_name='4-newton.html',context=context)
                 
             elif E[c] < Tol:
@@ -356,13 +373,17 @@ def newton_page(request):
                 d = {"Iteraciones": iters, "Xn": x_vals, "f(Xn)": fn, "f'(Xn)": dvs, "Error": E}
                 df = pd.DataFrame(d) 
                 mensaje = f"La solución aproximada es: {s}, con una tolerancia = {Tol} ({tipo})"
-                context={'mensaje':mensaje,'df':df,'fun':Fun,'x0':iniX0,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'x0':iniX0,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
                 return render(request,template_name='4-newton.html',context=context)
             
             else:
                 s = xn
                 mensaje = "Fracaso en"+ str(Niter) + "iteraciones"
-                context = {'mensaje':mensaje,'df':df}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
                 return render(request,template_name='4-newton.html',context=context)
 
     if request.method == 'GET':
@@ -396,17 +417,23 @@ def raices_multiples_page(request):
         domf = continuous_domain(Fun, x, S.Reals)
         if not domf.contains(X0):
             mensaje = f"La función no está definida en x = {X0}. El método falla."
-            context = {'mensaje':mensaje,'df':df}
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
             return render(request,template_name='5-raices_multiples.html',context=context)
             
         elif not derivative.subs(x, X0).is_finite:
             mensaje = f"La función no es diferenciable en x = {X0}. El método falla."
-            context = {'mensaje':mensaje,'df':df}
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
             return render(request,template_name='5-raices_multiples.html',context=context)
         
         elif not derivative2.subs(x, X0).is_finite:
             mensaje = f"La función no tiene segunda derivada en x = {X0}. El método falla."
-            context = {'mensaje':mensaje,'df':df}
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
             return render(request,template_name='5-raices_multiples.html',context=context)
         
         else: 
@@ -427,17 +454,23 @@ def raices_multiples_page(request):
                 
                 if not domf.contains(xn):
                     mensaje = f"La función no está definida en x{c} = {xn}. El método falla."
-                    context = {'mensaje':mensaje,'df':df}
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                     return render(request,template_name='5-raices_multiples.html',context=context)
 
                 elif not derivative.subs(x,xn).is_finite:
                     mensaje = f"La función no es diferenciable en x{c} = {xn}. El método falla."
-                    context = {'mensaje':mensaje,'df':df}
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                     return render(request,template_name='5-raices_multiples.html',context=context)
                 
                 elif not derivative2.subs(x,xn).is_finite:
                     mensaje = f"La función no tiene segunda derivada en x{c} = {xn}. El método falla."
-                    context = {'mensaje':mensaje,'df':df}
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                     return render(request,template_name='5-raices_multiples.html',context=context)
                 
                 f, derivada, derivada2 = func(xn), deriv(xn), deriv2(xn)
@@ -457,13 +490,17 @@ def raices_multiples_page(request):
             if f == 0:
                 s = xn
                 mensaje = str(s)+"es raiz de f(x)"
-                context = {'mensaje':mensaje,'df':df}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                 return render(request,template_name='5-raices_multiples.html',context=context)
             
             if (derivada**2 - (f*derivada2)) == 0:
                 s = xn
                 mensaje = "El método falla. El denominador es 0."
-                context = {'mensaje':mensaje,'df':df}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                 return render(request,template_name='5-raices_multiples.html',context=context)
                 
             elif E[c] < Tol: #Vuelve
@@ -471,13 +508,17 @@ def raices_multiples_page(request):
                 d = {"Iteraciones": iters, "Xn": x_vals, "f(Xn)": fn, "f'(Xn)": dvs, "f''(Xn)": dvs2, "Error": E}
                 df = pd.DataFrame(d) 
                 mensaje = f"La solución aproximada es: {s}, con una tolerancia = {Tol} ({tipo})"
-                context={'mensaje':mensaje,'df':df,'fun':Fun,'x0':iniX0,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'x0':iniX0,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
                 return render(request,template_name='5-raices_multiples.html',context=context)
             
             else:
                 s = xn
                 mensaje = f"Fracaso en {Niter} iteraciones"
-                context = {'mensaje':mensaje,'df':df}
+                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph.save('Grafica.png')
+                context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                 return render(request,template_name='5-raices_multiples.html',context=context)
 
     if request.method == 'GET':
@@ -509,11 +550,15 @@ def secante_page(request):
         domf = continuous_domain(Fun, x, S.Reals)
         if not domf.contains(X0):
             mensaje = f"La función no está definida en x = {X0}. El método falla."
-            context = {'mensaje':mensaje,'df':df}
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
             return render(request,template_name='6-secante.html',context=context)
         elif not domf.contains(X1):
             mensaje = f"La función no está definida en x = {X1}. El método falla."
-            context = {'mensaje':mensaje,'df':df}
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
             return render(request,template_name='6-secante.html',context=context)
         
         else: 
@@ -541,7 +586,9 @@ def secante_page(request):
                     
                     if not domf.contains(x_val):
                         mensaje = f"La función no está definida en x{c} = {x_val}. El método falla."
-                        context = {'mensaje':mensaje,'df':df}
+                        graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                        graph.save('Grafica.png')
+                        context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                         return render(request,template_name='6-secante.html',context=context)
                         
                         
@@ -560,12 +607,16 @@ def secante_page(request):
                 if fn[c] == 0:
                     s = x_val
                     mensaje = str(s)+"es raiz de f(x)"
-                    context = {'mensaje':mensaje,'df':df}
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                     return render(request,template_name='6-secante.html',context=context)
                 
                 if (f1-f0 == 0):
                     mensaje = "El método falla"
-                    context = {'mensaje':mensaje,'df':df}
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                     return render(request,template_name='6-secante.html',context=context)
                 
                 elif E[c] < Tol:
@@ -573,13 +624,17 @@ def secante_page(request):
                     d = {"Iteraciones": iters, "Xn": xn, "f(Xn)": fn, "Error": E}
                     df = pd.DataFrame(d) 
                     mensaje = f"La solución aproximada es: {s}, con una tolerancia = {Tol} ({tipo})"
-                    context={'mensaje':mensaje,'df':df,'fun':Fun,'x0':iniX0,'x1':iniX1,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'x0':iniX0,'x1':iniX1,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
                     return render(request,template_name='6-secante.html',context=context)
                 
                 else:
                     s = x_val
                     mensaje = f"Fracaso en {Niter} iteraciones "
-                    context = {'mensaje':mensaje,'df':df}
+                    graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                    graph.save('Grafica.png')
+                    context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
                     return render(request,template_name='6-secante.html',context=context)
 
     if request.method == 'GET':

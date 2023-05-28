@@ -105,6 +105,12 @@
                   Número de iteraciones = {{ niter }} <br>
                 </div>
                 {% endif %}
+                {% if grafica %}
+                <div class="mt-4">
+                  <h4 class="text-center">Grafica</h4>
+                  <img style="position: relative; right: 90px; width: 600px;" src="{{ grafica }}">
+                </div>
+                {% endif %}
             </div>
             <div class="col-lg-7 col-sm-12 data_frame">
                 <div class="mb-1">
