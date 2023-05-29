@@ -109,9 +109,10 @@ def biseccion_page(request):
         
         else:
             mensaje = "El intervalo es inadecuado"
+            s=0
 
 
-        graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+        graph = plot(Fun, (x,s-5,s+5) , xlabel='x', ylabel='y', show=False)
         graph.save('Grafica.png')
 
         context={'mensaje':mensaje,'df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter,'grafica':'../Grafica.png'}
@@ -290,7 +291,7 @@ def punto_fijo_page(request):
             sol = x_val
             mensaje = "Fracasó en "+ str(Niter)+ " iteraciones "
         
-        graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+        graph = plot(Fun, (x,sol-5,sol+5), xlabel='x', ylabel='y', show=False)
         graph.save('Grafica.png')
         context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'x0':iniX0,'gf':gf,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
         return render(request,template_name='3-punto_fijo.html',context=context)
@@ -1091,7 +1092,7 @@ def newton_diferencias_divididas_page(request):
         if len(x) != len(y):
             mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
             context = {'mensaje':mensaje}
-            return render(request,template_name='10-vandermonde.html',context=context)
+            return render(request,template_name='11-newton_diferencias_divididas.html',context=context)
         
     
         if len(np.unique(x)) == len(x): different = True
@@ -1171,14 +1172,14 @@ def lagrange_page(request):
         if len(x) != len(y):
             mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
             context = {'mensaje':mensaje}
-            return render(request,template_name='10-vandermonde.html',context=context)
+            return render(request,template_name='12-lagrange.html',context=context)
         
         if len(np.unique(x)) == len(x): different = True
         else: different = False
         if not different: 
             mensaje = "Los valores de x no deben repertirse para que sea una función "
             context = {'mensaje':mensaje}
-            return render(request,template_name='11-newton_diferencias_divididas.html',context=context)
+            return render(request,template_name='12-lagrange.html',context=context)
         
         n = len(x)
         Tabla = np.zeros((n, n))
