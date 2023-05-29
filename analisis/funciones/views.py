@@ -24,6 +24,9 @@ def biseccion_page(request):
         inib = b
         df=0
 
+        if a > b:
+            temp = a
+            a, b = b, temp
 
         if tipo_error == 1: 
             tipo = "decimales correctos"
@@ -34,6 +37,16 @@ def biseccion_page(request):
         
         Fun = sympify(Fun)
         func = lambda m: Fun.evalf(15, subs = {x: m})
+        dom = continuous_domain(Fun, x, S.Reals)
+        interval = Interval(a,b)
+
+        if not interval.is_subset(dom):
+            mensaje = f"La función no es continua en el intervalo [{a},{b}]. El método falla."
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context={'mensaje':mensaje,'df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter,'grafica':'../Grafica.png'}
+            return render(request,template_name='1-biseccion.html',context=context)
+
         x_vals, fm, E, iters = [], [], [], []
         fa = func(a)
         fb = func(b)
@@ -127,8 +140,21 @@ def regla_falsa_page(request):
             tipo = "cifras significativas"
             Tol = 5*(10**-num_tol)
         
+        if a > b:
+            temp = a
+            a, b = b, temp
+        
         Fun = sympify(Fun)
         func = lambda m: Fun.evalf(15, subs = {x: m})
+        dom = continuous_domain(Fun, x, S.Reals)
+        interval = Interval(a,b)
+        if not interval.is_subset(dom):
+            mensaje = f"La función no es continua en el intervalo [{a},{b}]. El método falla."
+            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+            graph.save('Grafica.png')
+            context={'mensaje':mensaje,'df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter,'grafica':'../Grafica.png'}
+            return render(request,template_name='1-biseccion.html',context=context)
+        
         x_vals, fm, E, iters = [], [], [], []
         fa = func(a)
         fb = func(b)
