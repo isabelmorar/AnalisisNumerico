@@ -1243,7 +1243,7 @@ def spline_page(request):
         if len(x) != len(y):
             mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
             context = {'mensaje':mensaje}
-            return render(request,template_name='10-vandermonde.html',context=context)
+            return render(request,template_name='13-spline.html',context=context)
 
         if d==1:
             tipo="Lineal"
