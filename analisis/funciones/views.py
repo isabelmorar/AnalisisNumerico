@@ -153,7 +153,7 @@ def regla_falsa_page(request):
             graph = plot(Fun, xlabel='x', ylabel='y', show=False)
             graph.save('Grafica.png')
             context={'mensaje':mensaje,'df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter,'grafica':'../Grafica.png'}
-            return render(request,template_name='1-biseccion.html',context=context)
+            return render(request,template_name='2-regla_falsa.html',context=context)
         
         x_vals, fm, E, iters = [], [], [], []
         fa = func(a)
@@ -702,7 +702,7 @@ def jacobi_page(request):
             A.append(row_numbers)
         A = np.array(A)
         if not A_flag: 
-            mensaje = "Error: La matriz A no corresponde una una matriz cuadrada de dimensión {size} "
+            mensaje = f"Error: La matriz A no corresponde una una matriz cuadrada de dimensión {size} "
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='7-jacobi.html',context=context)
     # -----------------------------------------
@@ -729,13 +729,14 @@ def jacobi_page(request):
         L = -np.tril(A, -1)
         U = -np.triu(A, 1)
         E, xn = [],[]
-        T = np.linalg.inv(D) @ (L + U)
-        C = np.linalg.inv(D) @ b
+        
         if(np.linalg.det(D)==0) : 
             mensaje = "Matriz D es singular, el método falla" ### error
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='7-jacobi.html',context=context)
         else:
+            T = np.linalg.inv(D) @ (L + U)
+            C = np.linalg.inv(D) @ b
             while error > Tol and c < niter:
                 x1 = T @ x0 + C
                 error = np.linalg.norm(x1 - x0, norma)
@@ -810,7 +811,7 @@ def gauss_seidel_page(request):
             A.append(row_numbers)
         A = np.array(A)
         if not A_flag: 
-            mensaje = "Error: La matriz A no corresponde una una matriz cuadrada de dimensión {size} "
+            mensaje = f"Error: La matriz A no corresponde a una matriz cuadrada de dimensión {size} "
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='8-gauss_seidel.html',context=context)
                 
@@ -835,11 +836,7 @@ def gauss_seidel_page(request):
         L = -np.tril(A, -1)
         U = -np.triu(A, 1)
         E = np.zeros(niter)
-        T = np.linalg.inv(D - L) @ U
-        C = np.linalg.inv(D - L) @ b
         
-        eigenvalues = np.linalg.eigvals(T)
-        radio_espectral = max(abs(eigenvalues))
         
         x_vals, E, iters = [], [], []
         x_vals.append(np.ravel(x0))
@@ -850,9 +847,11 @@ def gauss_seidel_page(request):
             mensaje = "La matriz (D - L) no es invertible. El método falla"
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='8-gauss_seidel.html',context=context)
-
-
-        else: 
+        else:
+            T = np.linalg.inv(D - L) @ U
+            C = np.linalg.inv(D - L) @ b
+            eigenvalues = np.linalg.eigvals(T)
+            radio_espectral = max(abs(eigenvalues))
             while error > Tol and c < niter:
                 x1 = T @ x0 + C
                 x_vals.append(np.ravel(x1))
@@ -927,12 +926,12 @@ def SOR_page(request):
         
         A = np.array(A)
         if not A_flag: 
-            mensaje = f"Error: La matriz A no corresponde una una matriz cuadrada de dimensión {size} "
+            mensaje = f"Error: La matriz A no corresponde a una matriz cuadrada de dimensión {size} "
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='9-SOR.html',context=context)
         
         if w<=0 or w>=2: 
-            mensaje = " El peso de w no está dentro de su dominio. Elige un número entre I(0,2) para que el método converja" #Imprimir este error
+            mensaje = " El peso de w no está dentro de su dominio. Elige un número entre I = (0,2) para que el método converja" #Imprimir este error
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='9-SOR.html',context=context)
 
@@ -963,7 +962,7 @@ def SOR_page(request):
         x_n = [x0]
         
         if np.linalg.det(D - w * L)== 0:  
-            mensaje = "Matriz D-wL es singular, el método falla" ### error
+            mensaje = "Matriz D-wL es singular, el método falla"
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='9-SOR.html',context=context)
         
@@ -992,16 +991,16 @@ def SOR_page(request):
             return render(request,template_name='9-SOR.html',context=context)
         else:
             s = x0
-            mensaje = f'Fracasó en {niter} iteraciones'
+            mensaje = f'Fracasó en {niter} iteraciones. '
             if not dominant:
                 mensaje = mensaje + "El método puede diverger porque la matriz A no es estrictamente diagonal dominante. \n"
             mensaje = mensaje + "Es posible que haya fallado el método porque: \n"
             if rho >= 1:
-                mensaje = mensaje + f"- El radio espectral de T es {rho} y es mayor a 1"
+                mensaje = mensaje + f"- El radio espectral de T es {rho} y es mayor a 1. "
             if not simetria: 
-                mensaje = mensaje + "- La matriz A no es simétrica"
+                mensaje = mensaje + "- La matriz A no es simétrica. "
             if not def_positiva:
-                mensaje = mensaje + "- La matriz A no es definida positiva"
+                mensaje = mensaje + "- La matriz A no es definida positiva. "
             context = {'mensaje':mensaje,'df':df}
             return render(request,template_name='9-SOR.html',context=context)
 
@@ -1015,6 +1014,12 @@ def vandermonde_page(request):
         
         x = np.asarray(list(map(float, x.split())))
         y = np.asarray(list(map(float, y.split())))
+
+        if len(x) != len(y):
+            mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
+            context = {'mensaje':mensaje}
+            return render(request,template_name='10-vandermonde.html',context=context)
+
         
         if len(np.unique(x)) == len(x): different = True
         else: different = False
@@ -1045,7 +1050,8 @@ def vandermonde_page(request):
                 if round(comp,3)>0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
                 else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
                 i+=1
-            pol_string+=str(round(pol[-1],3))
+            if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
+            else: pol_string+= str(round(pol[-1],3))
             #----------------------------------------------------------------
             mensaje = f"El polinomio que interpola los puntos dados es: {pol_string}"
             #Grafica del polinomio ------------------------------------------
@@ -1078,6 +1084,11 @@ def newton_diferencias_divididas_page(request):
         
         x = np.asarray(list(map(float, x.split())))
         y = np.asarray(list(map(float, y.split())))
+
+        if len(x) != len(y):
+            mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
+            context = {'mensaje':mensaje}
+            return render(request,template_name='10-vandermonde.html',context=context)
         
     
         if len(np.unique(x)) == len(x): different = True
@@ -1116,7 +1127,9 @@ def newton_diferencias_divididas_page(request):
             if round(comp,3)>0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             i+=1
-        pol_string+=str(round(pol[-1],3))
+        if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
+        else: pol_string+= str(round(pol[-1],3))
+        
         mensaje = f"El polinomio que interpola los puntos dados es: {pol_string}"
         # Grafica -------------------------------------------------------------
             
@@ -1148,6 +1161,11 @@ def lagrange_page(request):
         
         x = np.asarray(list(map(float, x.split())))
         y = np.asarray(list(map(float, y.split())))
+
+        if len(x) != len(y):
+            mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
+            context = {'mensaje':mensaje}
+            return render(request,template_name='10-vandermonde.html',context=context)
         
         if len(np.unique(x)) == len(x): different = True
         else: different = False
@@ -1178,7 +1196,8 @@ def lagrange_page(request):
             if round(comp,3)>0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             i+=1
-        pol_string+=str(round(pol[-1],3))
+        if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
+        else: pol_string+= str(round(pol[-1],3))
         #----------------------------------------------------------------
         mensaje = f"El polinomio que interpola los puntos dados es: {pol_string}"
         #Grafica del polinomio ------------------------------------------
@@ -1211,6 +1230,11 @@ def spline_page(request):
         df=0
         mensaje=""
         tipo=""
+
+        if len(x) != len(y):
+            mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
+            context = {'mensaje':mensaje}
+            return render(request,template_name='10-vandermonde.html',context=context)
 
         if d==1:
             tipo="Lineal"
@@ -1375,7 +1399,7 @@ def spline_page(request):
                     else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
                     i+=1
                     
-                mensaje = mensaje + f"El polinomio que interpola en el tramo {l} dados es: {pol_string}"
+                mensaje = mensaje + f"El polinomio que interpola en el tramo {l} dado es: {pol_string}"
                 l+=1
                 if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
                 else: pol_string+= str(round(pol[-1],3))
@@ -1394,7 +1418,7 @@ def spline_page(request):
                 
             plt.title(f"Gráfica de la interpolación de los puntos")
             plt.plot(x,y, marker='.', ls='none', ms=10, color="k")
-            plt.legend(["Puntos dados", "Interpolación"])
+            plt.legend(["Interpolación","Puntos dados"])
             plt.xlabel("x")
             plt.ylabel("y")
             plt.grid()
