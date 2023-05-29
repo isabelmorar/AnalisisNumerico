@@ -105,7 +105,7 @@ def biseccion_page(request):
                 
             else:
                 s = Xm
-                mensaje = "Fracaso en "+ str(Niter)+ " iteraciones "
+                mensaje = "Fracasó en "+ str(Niter)+ " iteraciones "
         
         else:
             mensaje = "El intervalo es inadecuado"
@@ -212,16 +212,16 @@ def regla_falsa_page(request):
            
             else:
                 s = Xm
-                mensaje = "Fracaso en "+ str(Niter)+ " iteraciones "
-
-            graph = plot(Fun, xlabel='x', ylabel='y', show=False)
-            graph.save('Grafica.png')
-            
-            context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
-            return render(request,template_name='2-regla_falsa.html',context=context)
+                mensaje = "Fracasó en "+ str(Niter)+ " iteraciones "
         
         else:
             mensaje = "El intervalo es inadecuado"
+        
+        graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+        graph.save('Grafica.png')
+        
+        context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
+        return render(request,template_name='2-regla_falsa.html',context=context)
 
     if request.method == 'GET':
         return render(request,template_name='2-regla_falsa.html')
@@ -288,7 +288,7 @@ def punto_fijo_page(request):
         
         else:
             sol = x_val
-            mensaje = "Fracaso en "+ str(Niter)+ " iteraciones "
+            mensaje = "Fracasó en "+ str(Niter)+ " iteraciones "
         
         graph = plot(Fun, xlabel='x', ylabel='y', show=False)
         graph.save('Grafica.png')
@@ -406,7 +406,7 @@ def newton_page(request):
             
             else:
                 s = xn
-                mensaje = "Fracaso en"+ str(Niter) + "iteraciones"
+                mensaje = "Fracasó en"+ str(Niter) + "iteraciones"
                 graph = plot(Fun, xlabel='x', ylabel='y', show=False)
                 graph.save('Grafica.png')
                 context = {'mensaje':mensaje,'grafica':'../Grafica.png','df':df}
@@ -541,7 +541,7 @@ def raices_multiples_page(request):
             
             else:
                 s = xn
-                mensaje = f"Fracaso en {Niter} iteraciones"
+                mensaje = f"Fracasó en {Niter} iteraciones"
                 graph = plot(Fun, xlabel='x', ylabel='y', show=False)
                 graph.save('Grafica.png')
                 context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
@@ -657,7 +657,7 @@ def secante_page(request):
                 
                 else:
                     s = x_val
-                    mensaje = f"Fracaso en {Niter} iteraciones "
+                    mensaje = f"Fracasó en {Niter} iteraciones "
                     graph = plot(Fun, xlabel='x', ylabel='y', show=False)
                     graph.save('Grafica.png')
                     context = {'mensaje':mensaje,'df':df,'grafica':'../Grafica.png'}
@@ -1059,12 +1059,15 @@ def vandermonde_page(request):
             t = np.arange(min(x),max(x)+paso,paso) #domain function
             for i, val in zip(range(len(pol)), pol):
                 z += val*t**(len(pol)-i-1)
+
+            plt.cla()
+            plt.clf()
             plt.plot(t,z)
             plt.plot(x,y, marker='.', ls='none', ms=10, color="k")
             plt.title("Gráfica de la interpolación de los puntos")
             plt.xlabel("x")
             plt.ylabel("y")
-            plt.legend(["Puntos dados", "Interpolación"])
+            plt.legend(["Interpolación","Puntos dados"])
             plt.grid()
             plt.savefig('Grafica.png')
             plt.cla()
@@ -1137,6 +1140,9 @@ def newton_diferencias_divididas_page(request):
         t = np.arange(min(x),max(x)+paso,paso) #domain function
         for i, val in zip(range(len(pol)), pol):
             z += val*t**(len(pol)-i-1)
+
+        plt.cla()
+        plt.clf()
         plt.plot(x,y, marker='.', ls='none', ms=10, color="k")
         plt.plot(t,z)
         plt.title(f"Gráfica de la interpolación de los puntos")
@@ -1205,6 +1211,9 @@ def lagrange_page(request):
         t = np.arange(min(x),max(x)+paso,paso) #domain function
         for i, val in zip(range(len(pol)), pol):
             z += val*t**(len(pol)-i-1)
+        
+        plt.cla()
+        plt.clf()
         plt.plot(x,y, marker='.', ls='none', ms=10, color="k")
         plt.plot(t,z)
         plt.title(f"Gráfica de la interpolación de los puntos")
@@ -1415,7 +1424,8 @@ def spline_page(request):
                 for i, val in zip(range(len(pol)), pol):
                     z += val*t**(len(pol)-i-1)
                 plt.plot(t,z)
-                
+            plt.cla()
+            plt.clf()
             plt.title(f"Gráfica de la interpolación de los puntos")
             plt.plot(x,y, marker='.', ls='none', ms=10, color="k")
             plt.legend(["Interpolación","Puntos dados"])
