@@ -113,7 +113,7 @@ def biseccion_page(request):
             s=0
 
 
-        graph = plot(Fun, (x,s-5,s+5) , xlabel='x', ylabel='y', show=False)
+        graph = plot(Fun, (x,s-20,s+20) , xlabel='x', ylabel='y', show=False)
         graph.save('Grafica.png')
 
         context={'mensaje':mensaje,'df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter,'grafica':'../Grafica.png'}
@@ -219,7 +219,7 @@ def regla_falsa_page(request):
         else:
             mensaje = "El intervalo es inadecuado"
         
-        graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+        graph = plot(Fun, (x,s-20,s+20), xlabel='x', ylabel='y', show=False)
         graph.save('Grafica.png')
         
         context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'a':inia,'b':inib,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
@@ -292,7 +292,7 @@ def punto_fijo_page(request):
             sol = x_val
             mensaje = "Fracasó en "+ str(Niter)+ " iteraciones "
         
-        graph = plot(Fun, (x,sol-5,sol+5), xlabel='x', ylabel='y', show=False)
+        graph = plot(Fun, (x,sol-20,sol+20), xlabel='x', ylabel='y', show=False)
         graph.save('Grafica.png')
         context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'x0':iniX0,'gf':gf,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
         return render(request,template_name='3-punto_fijo.html',context=context)
@@ -401,7 +401,7 @@ def newton_page(request):
                 d = {"Iteraciones": iters, "Xn": x_vals, "f(Xn)": fn, "f'(Xn)": dvs, "Error": E}
                 df = pd.DataFrame(d) 
                 mensaje = f"La solución aproximada es: {s}, con una tolerancia = {Tol} ({tipo})"
-                graph = plot(Fun, xlabel='x', ylabel='y', show=False)
+                graph = plot(Fun, (x,s-20,s+20), xlabel='x', ylabel='y', show=False)
                 graph.save('Grafica.png')
                 context={'mensaje':mensaje,'grafica':'../Grafica.png','df':df,'fun':Fun,'x0':iniX0,'tipo_error':tipo,'num_tol':num_tol,'niter':Niter}
                 return render(request,template_name='4-newton.html',context=context)
@@ -702,6 +702,7 @@ def jacobi_page(request):
             row_numbers = list(map(float, row_data))
             if len(row_numbers) != size: A_flag= False
             A.append(row_numbers)
+        if len(A) != size: A_flag = False
         A = np.array(A)
         if not A_flag: 
             mensaje = f"Error: La matriz A no corresponde una una matriz cuadrada de dimensión {size} "
@@ -811,6 +812,8 @@ def gauss_seidel_page(request):
             row_numbers = list(map(float, row_data))
             if len(row_numbers) != size: A_flag= False
             A.append(row_numbers)
+
+        if len(A) != size: A_flag = False
         A = np.array(A)
         if not A_flag: 
             mensaje = f"Error: La matriz A no corresponde a una matriz cuadrada de dimensión {size} "
@@ -926,6 +929,7 @@ def SOR_page(request):
             if len(row_numbers) != size: A_flag= False
             A.append(row_numbers)
         
+        if len(A) != size: A_flag = False
         A = np.array(A)
         if not A_flag: 
             mensaje = f"Error: La matriz A no corresponde a una matriz cuadrada de dimensión {size} "
@@ -1049,10 +1053,10 @@ def vandermonde_page(request):
             #Imprimir el polinomio---------------------------------------
             pol_string, i = str(round(pol[0],3)) + " x^" + str(len(pol)-1), 1
             for comp in pol[1:-1]:
-                if round(comp,3)>0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
+                if round(comp,3)>=0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
                 else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
                 i+=1
-            if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
+            if round(pol[-1],3)>=0: pol_string+=" + "+str(round(pol[-1],3))
             else: pol_string+= str(round(pol[-1],3))
             #----------------------------------------------------------------
             mensaje = f"El polinomio que interpola los puntos dados es: {pol_string}"
@@ -1129,10 +1133,10 @@ def newton_diferencias_divididas_page(request):
         # Imprimir el polinomio ---------------------------------------------
         pol_string, i = str(round(pol[0],3)) + " x^" + str(len(pol)-1), 1
         for comp in pol[1:-1]:
-            if round(comp,3)>0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
+            if round(comp,3)>=0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             i+=1
-        if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
+        if round(pol[-1],3)>=0: pol_string+=" + "+str(round(pol[-1],3))
         else: pol_string+= str(round(pol[-1],3))
         
         mensaje = f"El polinomio que interpola los puntos dados es: {pol_string}"
@@ -1201,10 +1205,10 @@ def lagrange_page(request):
         #Imprimir el polinomio---------------------------------------
         pol_string, i = str(round(pol[0],3)) + " x^" + str(len(pol)-1), 1
         for comp in pol[1:-1]:
-            if round(comp,3)>0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
+            if round(comp,3)>=0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
             i+=1
-        if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
+        if round(pol[-1],3)>=0: pol_string+=" + "+str(round(pol[-1],3))
         else: pol_string+= str(round(pol[-1],3))
         #----------------------------------------------------------------
         mensaje = f"El polinomio que interpola los puntos dados es: {pol_string}"
@@ -1242,11 +1246,6 @@ def spline_page(request):
         mensaje=""
         tipo=""
 
-        if len(x) != len(y):
-            mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
-            context = {'mensaje':mensaje}
-            return render(request,template_name='13-spline.html',context=context)
-
         if d==1:
             tipo="Lineal"
         elif d==2:
@@ -1256,6 +1255,11 @@ def spline_page(request):
         
         x = np.asarray(list(map(float, x.split())))
         y = np.asarray(list(map(float, y.split())))
+
+        if len(x) != len(y):
+            mensaje = "Los valores de X y Y deben tener la misma cantidad de elementos "
+            context = {'mensaje':mensaje}
+            return render(request,template_name='13-spline.html',context=context)
     
         if len(np.unique(x)) == len(x): different = True
         else: different = False
@@ -1406,13 +1410,12 @@ def spline_page(request):
             for pol in Tabla:
                 pol_string, i = str(round(pol[0],3)) + " x^" + str(len(pol)-1), 1
                 for comp in pol[1:-1]:
-                    if round(comp,3)>0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
+                    if round(comp,3)>=0: pol_string+= " + " + str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
                     else : pol_string+= str(round(comp,3)) + " x^" + str(len(pol)-1-i) +" "
                     i+=1
                     
-                mensaje = mensaje + f"El polinomio que interpola en el tramo {l} dado es: {pol_string}"
                 l+=1
-                if round(pol[-1],3)>0: pol_string+=" + "+str(round(pol[-1],3))
+                if round(pol[-1],3)>=0: pol_string+=" + "+str(round(pol[-1],3))
                 else: pol_string+= str(round(pol[-1],3))
                 
                 Tabla_string[j]= pol_string
