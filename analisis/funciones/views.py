@@ -1419,15 +1419,14 @@ def spline_page(request):
                 j+=1
             mensaje = mensaje + f"Los polinomios de grado {d} que interpolan los puntos son :"
             df = pd.DataFrame({"NumPol":np.arange(1,len(x),1),"Polinomios": np.transpose(Tabla_string)})
-            
+            plt.cla()
+            plt.clf()
             for pol, x_el in zip(Tabla, range(len(x)-1)):
                 t = np.linspace(x[x_el],x[x_el+1], 100) #domain function
                 z=0
                 for i, val in zip(range(len(pol)), pol):
                     z += val*t**(len(pol)-i-1)
                 plt.plot(t,z)
-            plt.cla()
-            plt.clf()
             plt.title(f"Gráfica de la interpolación de los puntos")
             plt.plot(x,y, marker='.', ls='none', ms=10, color="k")
             plt.legend(["Interpolación","Puntos dados"])
