@@ -22,6 +22,7 @@ def biseccion_page(request):
         Niter = int(request.POST.get('iteraciones'))
         inia = a
         inib = b
+        
         df=0
 
         if a > b:
